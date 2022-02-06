@@ -59,14 +59,12 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	claims := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.StandardClaims{
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    strconv.Itoa(int(user.Id)),
 		ExpiresAt: time.Now().Add(time.Hour * 1).Unix(),
 	})
 
 	token, err := claims.SignedString([]byte(SecretKey))
-
-	fmt.Println(token)
 
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
@@ -75,7 +73,8 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	fmt.Println(token)
 	return c.JSON(fiber.Map{
-		"message": "Login successfully",
+		"message": "Login Successfully",
 	})
 }
